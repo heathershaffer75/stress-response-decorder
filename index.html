@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stress Response Decoder</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-100 via-rose-100 to-yellow-100 p-6 text-slate-900">
+  <div class="mx-auto max-w-6xl">
+
+    <div class="rounded-3xl bg-white/80 p-6 shadow-2xl backdrop-blur">
+      <h1 class="text-4xl font-black">🧠 Stress Response Decoder</h1>
+      <p class="mt-2 text-lg">Understand how your nervous system reacts under stress, and what actually helps.</p>
+    </div>
+
+    <div id="grid" class="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3"></div>
+    <div id="detail" class="mt-6"></div>
+
+  </div>
+
+  <script>
+
+    function make(type, color, border, bg, desc, looksLike, feelsLike, helps, needs, questions){
+      return {type, color, border, bg, desc, looksLike, feelsLike, helps, needs, questions};
+    }
+
+    const responses = {
+
+      "Fight": make("🔥","bg-gradient-to-br from-red-400 via-orange-400 to-yellow-300","border-red-300","bg-red-50",
+        "Fight is your system trying to protect you by pushing back or taking control.",
+        ["arguing","irritability","blaming","control","anger"],
+        ["activated","tense","defensive","on edge"],
+        ["pause","cool your body","step away briefly","slow breathing","name what’s underneath"],
+        ["safety","respect","being heard","space before reacting"],
+        ["What feels threatened?","What is underneath the anger?","What would a calmer response look like?"]
+      ),
+
+      "Flight": make("🏃","bg-gradient-to-br from-yellow-300 via-amber-300 to-orange-300","border-amber-300","bg-amber-50",
+        "Flight is your system trying to escape or avoid discomfort or threat.",
+        ["avoidance","overworking","restlessness","leaving situations","distraction"],
+        ["anxious","uneasy","urgent","on the go"],
+        ["slow down","ground yourself","stay present","reduce stimulation","one step at a time"],
+        ["safety","stability","slowing down","reassurance"],
+        ["What am I trying to get away from?","What happens if I stay?","What helps me feel safer here?"]
+      ),
+
+      "Freeze": make("🧊","bg-gradient-to-br from-sky-300 via-blue-300 to-indigo-300","border-blue-300","bg-blue-50",
+        "Freeze is your system pausing or shutting down when things feel overwhelming.",
+        ["stuck","indecision","zoning out","difficulty starting","blank mind"],
+        ["numb","disconnected","foggy","immobilized"],
+        ["tiny steps","gentle movement","sensory grounding","reduce pressure","start anywhere"],
+        ["safety","gentleness","low pressure","small actions"],
+        ["What feels like too much?","What is one tiny step?","What helps me unfreeze safely?"]
+      ),
+
+      "Fawn": make("🤝","bg-gradient-to-br from-pink-300 via-rose-300 to-fuchsia-300","border-pink-300","bg-pink-50",
+        "Fawn is your system trying to stay safe by pleasing others or avoiding conflict.",
+        ["people-pleasing","saying yes","avoiding conflict","over-apologizing"],
+        ["anxious","dependent","concerned about others","fear of disapproval"],
+        ["pause before agreeing","check your needs","practice saying no","set small boundaries"],
+        ["self-trust","boundaries","permission to take up space","respect"],
+        ["What do I actually want?","Am I saying yes out of fear?","What would a boundary look like?"]
+      ),
+
+      "Shutdown": make("🌑","bg-gradient-to-br from-gray-400 via-slate-400 to-zinc-400","border-gray-400","bg-gray-50",
+        "Shutdown is your system conserving energy when things feel too overwhelming or exhausting.",
+        ["withdrawal","low energy","isolation","not responding","sleeping more"],
+        ["exhausted","flat","heavy","disconnected"],
+        ["rest intentionally","gentle activity","light connection","basic care","low demand tasks"],
+        ["rest","recovery","reduced pressure","compassion"],
+        ["What is draining me?","What would real rest look like?","What is one gentle re-entry step?"]
+      )
+
+    };
+
+    const grid = document.getElementById("grid");
+    const detail = document.getElementById("detail");
+
+    function section(title, items){
+      return `
+        <div class="mt-4">
+          <div class="font-bold">${title}</div>
+          <ul class="ml-5 list-disc">
+            ${items.map(i => `<li>${i}</li>`).join("")}
+          </ul>
+        </div>
+      `;
+    }
+
+    function render(name, r){
+      detail.innerHTML = `
+        <div class="p-6 rounded-2xl border-4 ${r.border} ${r.bg}">
+          <h2 class="text-2xl font-bold">${name}</h2>
+          <p class="mt-2">${r.desc}</p>
+          ${section("What it looks like", r.looksLike)}
+          ${section("What it feels like", r.feelsLike)}
+          ${section("What helps", r.helps)}
+          ${section("What it needs", r.needs)}
+          ${section("Discussion", r.questions)}
+        </div>
+      `;
+    }
+
+    Object.keys(responses).forEach(name => {
+      const r = responses[name];
+      const btn = document.createElement("button");
+      btn.className = `p-4 rounded-xl border-4 ${r.border} ${r.color} shadow-lg`;
+      btn.innerHTML = `<strong>${name}</strong>`;
+      btn.onclick = () => render(name, r);
+      grid.appendChild(btn);
+    });
+
+    render("Fight", responses["Fight"]);
+
+  </script>
+</body>
+</html>
